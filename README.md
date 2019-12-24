@@ -1,4 +1,4 @@
-## Yazılım Mimarisi ve Tasarımı
+## Yazılım Mimarisi ve Tasarımı Ödevi
 
 1160505034 
 Mert Çolakoğlu
@@ -94,3 +94,79 @@ public void espressoYap(){
 ## Strategy Tasarım Deseni
 
 Bir işlem için farklı yöntemlerin uygulanabilir olduğu durumlarda, bu yöntemi kullanacak olan nesne, hangi yöntemin uygulanacağını seçer. Çünkü bu içerik nesnesi, yöntemleri belirleyen üst sınıfı içerir. Farklı yöntem veya strateji alt sınıfları da, bu üst sınıftan türerler. Bu tasarım deseniyle, yöntemin nasıl uygulanması gerektiği ile ilgili detaylar, bu yöntemi kullanacak nesneden ayrılmış olur. Ayrıca bu tasarım deseninin kullanılmasıyla, kod uzun "if/else" veya "switch" ifadelerinden ayıklanır.
+
+![Image of Class](https://github.com/mcolakogluj/yazilim-mimarisi-ve-tasarimi/blob/master/StrategyDesign.png)
+
+Strateji Tasatım Desenine verilen örnek işlem örneğidir. 
+İnt tipinden iki sayı işleme tabi tutularak( islemYap() ) strateji yönetilir.
+
+Strateji arayüzü içinde, islemYap() fonksiyonu altsınıflara override edilerek işlemin gerçekleşmesini sağlayacaktır.
+
+```java
+public interface Strateji {
+    public int islemYap(int taktik1, int taktik2); 
+}
+```
+Strateji arayüzündeni İslemEkleme, İslemCikarma, İslemCarpma adında 3 sınıf türetilir.
+
+```java
+public class İslemEkleme implements Strateji{
+
+    @Override
+    public int islemYap(int taktik1, int taktik2) {
+        return taktik1 + taktik2;
+    }
+    
+}
+
+public class İslemCikarma implements Strateji{
+
+    @Override
+    public int islemYap(int taktik1, int taktik2) {
+        return taktik1 - taktik2;
+    }
+    
+}
+
+public class İslemCarpma implements Strateji{
+
+    @Override
+    public int islemYap(int taktik1, int taktik2) {
+        return taktik1 * taktik2;
+    }
+    
+}
+
+```
+Baglam sınıfı Stratejiyi yönetecek iki adet metoda sahip olacak, StratejiYonet(); metodu işlemi yapılacak olan değerleri işlem yapacak sınıfların fonksiyonlarına verecekken , Baglam sınıfının nesnesi 'baglam' StratejiYonet'in almış olduğu değerleri ve metodu döndürecektir.
+
+```java
+public class Baglam {
+    private Strateji strateji;
+    
+    public Baglam(Strateji strateji){
+        this.strateji = strateji;
+    }
+    
+    public int StratejiYonet(int taktik1, int taktik2){
+        return strateji.islemYap(taktik1, taktik2);
+    }
+}
+```
+
+```java
+public class StrategyDesign {
+
+    public static void main(String[] args) {
+        Baglam baglam = new Baglam(new İslemEkleme());
+        System.out.println("100 + 50 = " + baglam.StratejiYonet(100, 50));
+        
+        baglam = new Baglam(new İslemCikarma());
+        System.out.println("100 - 50 = " + baglam.StratejiYonet(100, 50));
+        
+        baglam = new Baglam(new İslemCarpma());
+        System.out.println("100 * 50 = " + baglam.StratejiYonet(100, 50));
+    }
+    
+}
+```
